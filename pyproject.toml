@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "emo-classifier"
+version = "0.1.0"
+description = "Audio-based emo song classifier using CLAP embeddings."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "joblib>=1.3",
+  "librosa>=0.10",
+  "numpy>=1.26",
+  "pandas>=2.1",
+  "scikit-learn>=1.4",
+  "soundfile>=0.12",
+  "spotipy>=2.24",
+  "torch>=2.2",
+  "transformers>=4.39",
+  "tqdm>=4.66",
+]
+
+[project.scripts]
+emo-classifier = "emo_classifier.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,5 @@
+path,label
+audio/emo_song_01.mp3,emo
+audio/emo_song_02.wav,1
+audio/non_emo_song_01.mp3,non_emo
+audio/non_emo_song_02.flac,0
