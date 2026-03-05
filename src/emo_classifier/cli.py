@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 
 from .embeddings import ClapEmbedder
 from .inference import load_artifact, predict_with_trained_model, predict_zero_shot
@@ -197,14 +198,18 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
 
-    if args.command == "train":
-        output = run_train(args)
-    elif args.command == "predict":
-        output = run_predict(args)
-    elif args.command == "zero-shot":
-        output = run_zero_shot(args)
-    else:
-        raise ValueError(f"Unsupported command: {args.command}")
+    try:
+        if args.command == "train":
+            output = run_train(args)
+        elif args.command == "predict":
+            output = run_predict(args)
+        elif args.command == "zero-shot":
+            output = run_zero_shot(args)
+        else:
+            raise ValueError(f"Unsupported command: {args.command}")
+    except Exception as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        raise SystemExit(1) from exc
 
     print(json.dumps(output, indent=2))
 

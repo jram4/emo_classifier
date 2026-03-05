@@ -8,11 +8,21 @@ import numpy as np
 
 def load_audio_mono(path: str | Path, target_sr: int = 48_000) -> tuple[np.ndarray, int]:
     """Load an audio file as normalized mono waveform."""
-    waveform, _ = librosa.load(path, sr=target_sr, mono=True)
+    audio_path = Path(path).expanduser().resolve()
+    if not audio_path.exists():
+        raise FileNotFoundError(f"Audio file not found: {audio_path}")
+    if not audio_path.is_file():
+        raise ValueError(f"Audio path is not a file: {audio_path}")
+
+    try:
+        waveform, _ = librosa.load(str(audio_path), sr=target_sr, mono=True)
+    except Exception as exc:
+        raise RuntimeError(f"Failed to decode audio file: {audio_path}") from exc
+
     waveform = waveform.astype(np.float32, copy=False)
 
     if waveform.size == 0:
-        raise ValueError(f"Audio file is empty: {path}")
+        raise ValueError(f"Audio file is empty: {audio_path}")
 
     peak = float(np.max(np.abs(waveform)))
     if peak > 0.0:
